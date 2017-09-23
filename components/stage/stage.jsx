@@ -1,6 +1,7 @@
 import { Component } from 'preact';
 import { route } from 'preact-router';
 import Fab from 'preact-material-components/Fab';
+import firebaseLoader from '../../scripts/firebase-loader.js';
 import LinearProgress from 'preact-material-components/LinearProgress';
 import 'preact-material-components/LinearProgress/style.css';
 import 'preact-material-components/Fab/style.css';
@@ -17,7 +18,8 @@ export default class Stage extends Component {
     this.state = {
       score: '',
       gameState: Stage.GameState.NOTLOADED,
-      highScore: localStorage.highscore
+      highScore: localStorage.highscore,
+      overAllHighScore: localStorage.overAllHighScore
     };
   }
   componentDidMount() {
@@ -25,6 +27,13 @@ export default class Stage extends Component {
       route('/');
     } else {
       this.initGame();
+    }
+    try {
+      console.log(firebase);
+    } catch (error) {
+      firebaseLoader.then(initFirebase => {
+        initFirebase();
+      });
     }
   }
   initGame() {
@@ -58,12 +67,32 @@ export default class Stage extends Component {
               },
               onFinish: () => {
                 const highScore = localStorage.highscore || 0;
-                if (this.state.score > highScore) {
-                  localStorage.highscore = this.state.score;
+                const overAllHighScore = localStorage.overAllHighScore || 0;
+                if (parseInt(this.state.score) > parseInt(highScore)) {
+                  localStorage.highscore = parseInt(this.state.score);
+                  let userId = localStorage.uid;
+                  if(firebase) {
+                    if(userId) {
+                      firebase.database().ref('/userArray/' + userId).set(parseInt(this.state.score));
+                    }
+                  }
+                }
+                if (parseInt(this.state.score) > parseInt(overAllHighScore)) {
+                  console.log(this.state.score);
+                  console.log(overAllHighScore);
+                  localStorage.overAllHighScore = parseInt(this.state.score);
+                  this.state.overAllHighScore = this.state.score;
+                  let userId = localStorage.uid;
+                  if(firebase) {
+                    if(userId) {
+                      firebase.database().ref('/topScore').set(this.state.score);
+                    }
+                  }
                 }
                 this.setState({
                   gameState: Stage.GameState.FINISHED,
-                  highScore: localStorage.highscore || this.state.score
+                  highScore: localStorage.highscore || this.state.score,
+                  overAllHighScore: localStorage.overAllHighScore || this.state.score
                 });
               }
             });
@@ -81,7 +110,13 @@ export default class Stage extends Component {
           {this.state.gameState == Stage.GameState.FINISHED &&
             <div className="mdc-typography--body">
               High score - {this.state.highScore}
-            </div>}
+            </div>
+            }
+            {this.state.gameState == Stage.GameState.FINISHED &&
+            <div className="mdc-typography--body">
+              Overall high score - {this.state.overAllHighScore}
+            </div>
+            }
         </div>
         {!this.state.isLoaded &&
           <div className={style.progress}>

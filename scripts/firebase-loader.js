@@ -2,7 +2,7 @@ const firebasePromise = new Promise((resolve,reject)=>{
 	if(typeof document!== "undefined"){
 		document.onreadystatechange = function () {
 			if (document.readyState === "interactive" || document.readyState === "complete") {
-				require.ensure(['firebase/app.js','firebase/auth.js'], (require) => {
+				require.ensure(['firebase/app.js','firebase/auth.js', 'firebase/database.js'], (require) => {
           var config = {
             apiKey: "AIzaSyDuORZGj2iaTTrs4LXJGNyUjfGHy1HudlY",
             authDomain: "hopgame-ecdb5.firebaseapp.com",
@@ -13,7 +13,8 @@ const firebasePromise = new Promise((resolve,reject)=>{
           };
 					const initFirebase = function() {
 						window.firebase = require('firebase/app.js');
-						firebase.auth = require('firebase/auth.js');
+            firebase.auth = require('firebase/auth.js');
+            firebase.database = require('firebase/database.js');
 						firebase.initializeApp(config);
 					};
 

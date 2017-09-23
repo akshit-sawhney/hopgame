@@ -29,6 +29,22 @@ export default class Home extends Component {
       .auth()
       .signInWithPopup(provider)
       .then(result => {
+        var userId = firebase.auth().currentUser.uid;
+        localStorage.uid = userId;
+        let topScore = firebase.database().ref('/topScore').once('value').then(function(snapshot) {
+          localStorage.overAllHighScore = snapshot.val() || 0;
+          return snapshot.val();
+        });
+        let myTopScore = firebase.database().ref('/userArray/' + userId).once('value').then(function(snapshot) {
+          let currentScoreValue = snapshot.val();
+          localStorage.highscore = currentScoreValue || 0;
+          if(currentScoreValue) {
+            return currentScoreValue;
+          } else {
+            firebase.database().ref('/userArray/' + userId).set(0);
+            return 0;
+        }
+        });
         localStorage.uname = result.user.displayName;
         route('/play');
       })
@@ -40,12 +56,16 @@ export default class Home extends Component {
     if (localStorage.uname) {
       route('/play', true);
     } else {
-      firebaseLoader.then(initFirebase => {
+      try {
+        console.log(firebase);
+      } catch (error) {
+        firebaseLoader.then(initFirebase => {
         this.initFirebase = initFirebase;
         this.setState({
           firebaseLoading: false
         });
       });
+      }
     }
   }
   render() {
