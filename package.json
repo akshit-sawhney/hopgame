@@ -1,0 +1,44 @@
+{
+  "name": "hopgame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint . && preact test",
+    "start": "if-env NODE_ENV=production && npm run -s serve || npm run -s dev",
+    "build": "preact build --template template.html && cp -R sounds/ build/sounds && cp -R images/ build/images",
+    "serve": "preact build && preact serve",
+    "dev": "preact watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikeshinoda/hopgame"
+  },
+  "keywords": [],
+  "author": "mikeshinoda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikeshinoda/hopgame/issues"
+  },
+  "homepage": "https://github.com/mikeshinoda/hopgame#readme",
+  "eslintConfig": {
+    "extends": "eslint-config-synacor"
+  },
+  "devDependencies": {
+    "babylonjs": "^3.1.0-alpha1",
+    "cannon": "^0.6.2",
+    "eslint": "^4.3.0",
+    "eslint-config-synacor": "^1.0.1",
+    "firebase": "^3.6.8",
+    "if-env": "^1.0.0",
+    "preact-cli": "^1.4.1",
+    "preact-cli-sw-precache": "^1.0.2",
+    "preact-material-components": "^1.1.5",
+    "webpack-plugin-critical": "^1.0.0"
+  },
+  "dependencies": {
+    "preact": "^8.2.5",
+    "preact-compat": "^3.16.0",
+    "preact-router": "^2.5.5"
+  }
+}

@@ -1,0 +1,11 @@
+# Node modules
+node_modules
+
+# vscode workspace settings
+.vscode
+
+# production build
+build
+
+# firebase configs
+.firebaserc

@@ -1,0 +1,78 @@
+.page{
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.stage{
+	position: absolute;
+	z-index: 1;
+	height: 100%;
+	width: 100%;
+	bottom: 0px;
+	outline: 0px;
+}
+
+.scoreContainer{
+	position: absolute;
+	z-index: 2;
+	text-align: center;
+	width: 100%;
+	top: 5%;
+	pointer-events: none;
+	user-select: none;
+}
+
+.fab{
+	position: absolute;
+	will-change: opacity;
+	transition-property: opacity;
+	transition-duration: 300ms;
+	opacity: 0;
+	z-index: 3;
+	bottom: 10%;
+	right: 5%;
+}
+
+.fab.appear{
+	opacity: 1;
+}
+
+.progress {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+}
+
+.swipeGesture{
+	position: absolute;
+	z-index: 4;
+	left: 0;
+	right: 0;
+	margin: auto;
+	bottom: 10%;
+	width: 75px;
+	pointer-events: none;
+	animation-name: swipegesture;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+	will-change: transform;
+}
+
+@keyframes swipegesture{
+	0%{
+		transform: translateX(0px);
+	}
+	25%{
+		transform: translateX(-100px);
+	}
+	50%{
+		transform: translateX(0px);
+	}
+	75%{
+		transform: translateX(100px);
+	}
+	100%{
+		transform: translateX(0px);
+	}
+}

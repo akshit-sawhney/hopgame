@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Hop on - an addictive progressive web game</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="keywords" content="progressive web game, game, addictive game">
+		<link rel="manifest" href="/manifest.json">
+		<% if (htmlWebpackPlugin.options.manifest.theme_color) { %>
+			<meta name="theme-color" content="<%= htmlWebpackPlugin.options.manifest.theme_color %>">
+		<% } %>
+		<% for (var chunk of webpack.chunks) { %>
+			<% for (var file of chunk.files) { %>
+				<% if (file.match(/gameengine/) && file.match(/\.(js)$/)) { %>
+					<link rel="prefetch" href="<%= htmlWebpackPlugin.files.publicPath + file %>">
+				<% } else if(file.match(/0.chunk/) && file.match(/\.(js)$/)) { %>
+					<link rel="preload" as="script" href="<%= htmlWebpackPlugin.files.publicPath + file %>">
+				<% }%>
+			<% } %>
+		<% } %>
+	</head>
+	<body>
+		<%= htmlWebpackPlugin.options.ssr({
+			url: '/'
+		}) %>
+		<script defer src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
+		<script>window.fetch||document.write('<script src="<%= htmlWebpackPlugin.files.chunks["polyfills"].entry %>"><\/script>')</script>
+	</body>
+</html>
